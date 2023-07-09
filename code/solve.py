@@ -35,22 +35,29 @@ class Client:
             self.backend = None
             ses.close()
 
-    def get_json(self, path, tries=3):
+    def get_json(self, path, tries=10):
         url = urljoin(self.api_url, path)
-        delay = 1
+        delay = 5
         for _ in range(tries):
             r = self.backend.get(url, headers=self.headers, timeout=self.timeout)
-            if r.status_code != 200:
+            if not r.ok:
                 time.sleep(delay)
-                delay *= 1.5
+                delay *= 1.8
             else:
                 break
         r.raise_for_status()
         return r.json()
     
-    def post_json(self, path, body):
+    def post_json(self, path, body, tries=10):
         url = urljoin(self.api_url, path)
-        r = self.backend.post(url, json=body, headers=self.headers, timeout=self.timeout)
+        delay = 5
+        for _ in range(tries):
+            r = self.backend.post(url, json=body, headers=self.headers, timeout=self.timeout)
+            if not r.ok:
+                time.sleep(delay)
+                delay *= 1.8
+            else:
+                break
         r.raise_for_status()
         return r.json()
 
