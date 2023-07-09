@@ -74,7 +74,7 @@ score_placement(u32 pos_index, u32 instrument, const pack_pos* ans, const pack_h
                 r64 dzx = people[i].x - ans[z].x;
                 r64 dzy = people[i].y - ans[z].y;
                 r64 dt = (dx * dzy - dzx * dy);
-                if (dt * dt / d2 < 25) {
+                if (dt * dt < d2 * 25) {
                     if (dzx * dzx + dzy * dzy < d2) {
                         reaching = 0;
                         break;
@@ -88,7 +88,7 @@ score_placement(u32 pos_index, u32 instrument, const pack_pos* ans, const pack_h
             r64 dzx = people[i].x - pillars[z].x;
             r64 dzy = people[i].y - pillars[z].y;
             r64 dt = (dx * dzy - dzx * dy);
-            if (dt * dt / d2 < r * r) {
+            if (dt * dt < d2 * r * r) {
                 if (dzx * dzx + dzy * dzy < d2) {
                     reaching = 0;
                     break;

@@ -17,12 +17,24 @@ def score_placement(placement, volumes, musicians, people, tastes, pillars, scor
             for z,pz in enumerate(placement):
                 if z == j: continue
                 tz = q - pz
-                t = abs(d.real * tz.imag - tz.real * d.imag) 
-                if t * t / d2 < 25 and abs(tz) < abs(d):
+                # t = abs(d.real * tz.imag - tz.real * d.imag) 
+                f = d.real * tz.imag - tz.real * d.imag
+                tt = f.real * f.real + f.imag * f.imag
+                # if tt / d2 < 25 and abs(tz) < abs(d):
+                if (tt < 25*d2) and (tz.real*tz.real+tz.imag*tz.imag) < d2:
                     break
             else:
-                t = tastes[i][k]
-                sub += math.ceil(1000000 * t / d2)
+                for pz,zr in pillars:
+                    tz = q - pz
+                    t = abs(d.real * tz.imag - tz.real * d.imag) 
+                    f = d.real * tz.imag - tz.real * d.imag
+                    tt = f.real * f.real + f.imag * f.imag
+                    # if t * t / d2 < zr * zr and abs(tz) < abs(d):
+                    if (tt < zr*zr*d2) and (tz.real*tz.real+tz.imag*tz.imag) < d2:
+                        break
+                else:
+                    t = tastes[i][k]
+                    sub += math.ceil(1000000 * t / d2)
         if scoring_mode == 2:
             qm = 1
             for z,(t,q) in enumerate(zip(musicians, placement)):
