@@ -156,12 +156,17 @@ solve(const pack_header& conf, const u32* musicians, const pack_ipos* people,
     
 #if 1
     // hex grid
+    std::random_device rng; rng();
+    std::default_random_engine rgen(rng());
+    std::uniform_int_distribution<u32> rdist(0, R);
+    u32 xoff = rdist(rgen);
+        
     const u32 MAXG = conf.stage_w * conf.stage_h / R2;
     pack_pos grid[MAXG];
     u32 ig = 0;
-    u32 run = 0;
+    u32 run = rdist(rgen) % 2;
     for (u32 y = R; y <= conf.stage_h - R; y += R34h, ++run) {
-        for (u32 x = (run % 2) * R + R; x <= conf.stage_w - R; x += R2) {
+        for (u32 x = (run % 2) * R + R + xoff; x <= conf.stage_w - R; x += R2) {
             u8 valid = 1;
 #if 0
             for (u32 z = 0; z < conf.pillars; ++z) {
@@ -186,15 +191,13 @@ solve(const pack_header& conf, const u32* musicians, const pack_ipos* people,
         fprintf(stderr, "! maxg:%u, ig:%u, musicians:%u\n", MAXG, ig, conf.musicians);
     }
 
-    std::random_device rng; rng();
-    std::default_random_engine rgen(rng());
-    std::uniform_int_distribution<u32> dist(0, ig-1);
+    std::uniform_int_distribution<u32> gdist(0, ig-1);
     u8 seen[ig];
     memset(&seen[0], 0, ig);
     for (u32 i = 0; i < conf.musicians; ++i) {
-        u32 j = dist(rgen);
+        u32 j = gdist(rgen);
         if (seen[j]) {
-            j = dist(rgen);
+            j = gdist(rgen);
         }
         if (seen[j]) {
             for (u32 k = 0; k < ig; ++k) {
