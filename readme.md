@@ -6,3 +6,5 @@ Team: UA_paiv
 
 https://icfpcontest2023.github.io/
 
+<img src="room-58.png" width="240"/>
+
